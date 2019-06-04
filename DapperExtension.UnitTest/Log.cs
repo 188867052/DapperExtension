@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DapperExtension
+namespace DapperExtension.UnitTest
 {
     public partial class Log
     {
