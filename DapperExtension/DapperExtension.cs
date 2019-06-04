@@ -17,7 +17,7 @@ namespace DapperExtension
         public static async Task<T> GetAsync<T>(this IDbConnection connection, object id, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             PrepareGet<T>(id, out string sql, out var parameters);
-            return (await connection.QueryAsync<T>(sql, parameters, transaction, commandTimeout)).FirstOrDefault();
+            return (await connection.QueryAsync<T>(sql, parameters, transaction, commandTimeout).ConfigureAwait(false)).FirstOrDefault();
         }
 
         public static Task<IEnumerable<T>> GetListAsync<T>(this IDbConnection connection, string whereSql, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)

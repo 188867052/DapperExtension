@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using DapperExtension;
 using DapperExtension.Entity;
@@ -26,14 +27,14 @@ namespace DapperExtension.UnitTest.Dapper.Insert
         {
             var log = new Log { LogLevel = (int)LogLevel.Information, CreateTime = DateTime.Now, Message = "TestInsertWithSpecifiedPrimaryKey" };
             var idTask = DapperExtension.Connection.InsertAsync(log);
-            var id = await idTask;
+            var id = await idTask.ConfigureAwait(false);
             Assert.Greater(id, 0);
         }
 
         [Test]
         public void TestInsertWithMultiplePrimaryKeys()
         {
-            var keyMaster = new MultiplePrimaryKeyTable { Id = Guid.NewGuid().ToString("N"), Name = Guid.NewGuid().ToString("N") };
+            var keyMaster = new MultiplePrimaryKeyTable { Id = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture), Name = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture) };
             string id = DapperExtension.Connection.InsertReturnKey(keyMaster);
             Assert.IsNotNull(id);
         }
@@ -41,8 +42,8 @@ namespace DapperExtension.UnitTest.Dapper.Insert
         [Test]
         public async Task TestInsertAsyncWithMultiplePrimaryKeysAsync()
         {
-            Task<dynamic> task = DapperExtension.Connection.InsertAsync(new MultiplePrimaryKeyTable { Id = Guid.NewGuid().ToString("N"), Name = Guid.NewGuid().ToString("N") });
-            var result = await task;
+            Task<dynamic> task = DapperExtension.Connection.InsertAsync(new MultiplePrimaryKeyTable { Id = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture), Name = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture) });
+            var result = await task.ConfigureAwait(false);
             Assert.IsNotNull(result);
         }
 
@@ -58,7 +59,7 @@ namespace DapperExtension.UnitTest.Dapper.Insert
         public async Task TestInsertAsyncUsingGenericLimitedFieldsAsync()
         {
             var log = new Log { LogLevel = (int)LogLevel.Information, Message = "TestInsertWithSpecifiedPrimaryKey" };
-            dynamic task = await DapperExtension.Connection.InsertAsync(log);
+            dynamic task = await DapperExtension.Connection.InsertAsync(log).ConfigureAwait(false);
             Assert.IsNotNull(task);
         }
 

@@ -357,7 +357,7 @@ namespace DapperExtension
             sb.Append($"@{string.Join(", @", newProperties)}");
             sb.Append($");{_getIdentitySql}");
 
-            var result = await connection.QueryAsync(sb.ToString(), entity, transaction, commandTimeout);
+            var result = await connection.QueryAsync(sb.ToString(), entity, transaction, commandTimeout).ConfigureAwait(false);
             if (HasMultipleKey<TEntity>())
             {
                 return typeof(TEntity).GetProperty(ToProperty(ToProperty(key))).GetValue(entity, null);

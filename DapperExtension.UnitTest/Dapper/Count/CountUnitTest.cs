@@ -20,7 +20,7 @@ namespace DapperExtension.UnitTest.Dapper.Count
                 Assert.AreEqual(count, 1);
                 count = DapperExtension.Connection.RecordCount<User>();
                 Assert.GreaterOrEqual(count, 0);
-                count = await DapperExtension.Connection.RecordCountAsync<User>();
+                count = await DapperExtension.Connection.RecordCountAsync<User>().ConfigureAwait(false);
                 Assert.GreaterOrEqual(count, 0);
             }
         }
@@ -31,7 +31,7 @@ namespace DapperExtension.UnitTest.Dapper.Count
             User user = DapperExtension.Connection.QueryFirst<User>();
             if (user != null)
             {
-                int count = await DapperExtension.Connection.RecordCountAsync<User>();
+                int count = await DapperExtension.Connection.RecordCountAsync<User>().ConfigureAwait(false);
                 Assert.GreaterOrEqual(count, 0);
             }
         }
@@ -42,7 +42,7 @@ namespace DapperExtension.UnitTest.Dapper.Count
             User user = DapperExtension.Connection.QueryFirst<User>();
             if (user != null)
             {
-                int count = await DapperExtension.Connection.RecordCountAsync<User>(new { id });
+                int count = await DapperExtension.Connection.RecordCountAsync<User>(new { id }).ConfigureAwait(true);
                 Assert.GreaterOrEqual(count, 0);
                 count = DapperExtension.Connection.RecordCount<User>(new { id });
                 Assert.GreaterOrEqual(count, 0);
@@ -55,7 +55,7 @@ namespace DapperExtension.UnitTest.Dapper.Count
             User user = DapperExtension.Connection.QueryFirst<User>();
             if (user != null)
             {
-                int count = await DapperExtension.Connection.RecordCountAsync<User>(new { ID = 10 });
+                int count = await DapperExtension.Connection.RecordCountAsync<User>(new { ID = 10 }).ConfigureAwait(false);
                 Assert.GreaterOrEqual(count, 0);
             }
         }

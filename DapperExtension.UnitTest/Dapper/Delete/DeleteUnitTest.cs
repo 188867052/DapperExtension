@@ -24,7 +24,7 @@ namespace DapperExtension.UnitTest.Dapper.Delete
             log = DapperExtension.Connection.QueryFirst<Log>();
             if (log != null)
             {
-                int count = await DapperExtension.Connection.DeleteAsync<Log>(log.Id);
+                int count = await DapperExtension.Connection.DeleteAsync<Log>(log.Id).ConfigureAwait(false);
                 Assert.AreEqual(count, 1);
             }
         }
@@ -60,7 +60,7 @@ namespace DapperExtension.UnitTest.Dapper.Delete
             log = DapperExtension.Connection.QueryFirst<Log>();
             if (log != null)
             {
-                var count = await DapperExtension.Connection.DeleteListAsync<Log>("where Id = @Id", new { log.Id });
+                var count = await DapperExtension.Connection.DeleteListAsync<Log>("where Id = @Id", new { log.Id }).ConfigureAwait(false);
                 Assert.AreEqual(count, 1);
             }
         }
@@ -82,7 +82,7 @@ namespace DapperExtension.UnitTest.Dapper.Delete
             Log log = DapperExtension.Connection.QueryFirst<Log>();
             if (log != null)
             {
-                int count = await DapperExtension.Connection.DeleteAsync(log);
+                int count = await DapperExtension.Connection.DeleteAsync(log).ConfigureAwait(false);
                 Assert.AreEqual(count, 1);
             }
 
@@ -100,7 +100,7 @@ namespace DapperExtension.UnitTest.Dapper.Delete
             MultiplePrimaryKeyTable entity = DapperExtension.Connection.QueryFirst<MultiplePrimaryKeyTable>();
             if (entity != null)
             {
-                var count = await DapperExtension.Connection.DeleteAsync(entity);
+                var count = await DapperExtension.Connection.DeleteAsync(entity).ConfigureAwait(false);
                 Assert.AreEqual(count, 1);
             }
         }
