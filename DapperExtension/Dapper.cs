@@ -7,6 +7,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -288,7 +289,7 @@ namespace DapperExtension
         public static string ToProperty(string field)
         {
             var array = field.Split('_');
-            return array.Aggregate<string, string>(default, (current, item) => current + char.ToUpper(item[0]) + item.Substring(1));
+            return array.Aggregate<string, string>(default, (current, item) => current + char.ToUpper(item[0], CultureInfo.InvariantCulture) + item.Substring(1));
         }
 
         public static string ToColumn<T>(string propertyName)
@@ -303,7 +304,7 @@ namespace DapperExtension
 
         public static string GetColumn<T>(string propertyName)
         {
-            return GetColumns<T>().FirstOrDefault(o => o.Replace("_", string.Empty).Equals(propertyName, StringComparison.InvariantCultureIgnoreCase));
+            return GetColumns<T>().FirstOrDefault(o => o.Replace("_", string.Empty, StringComparison.InvariantCulture).Equals(propertyName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public static string GetKey<T>()
@@ -436,7 +437,7 @@ namespace DapperExtension
             foreach (var item in nonIdColumns)
             {
                 int index = nonIdColumns.IndexOf(item);
-                stringBuilder.AppendFormat("{0}{1} = @{2}", index == 0 ? string.Empty : ",", item, ToProperty(item));
+                stringBuilder.AppendFormat(CultureInfo.InvariantCulture, "{0}{1} = @{2}", index == 0 ? string.Empty : ",", item, ToProperty(item));
             }
         }
 
@@ -453,12 +454,13 @@ namespace DapperExtension
             {
                 var value = property.GetValue(whereConditions, null);
                 sb.AppendFormat(
+                    CultureInfo.InvariantCulture,
                     value == DBNull.Value ? "{0} IS NULL" : "{0} = @{1}",
                     ToColumn<T>(property.Name) ?? property.Name,
                     property.Name);
                 if (propertyInfos.IndexOf(property) != propertyInfos.Length - 1)
                 {
-                    sb.AppendFormat(" AND ");
+                    sb.AppendFormat(CultureInfo.InvariantCulture, " AND ");
                 }
             }
         }
@@ -470,7 +472,7 @@ namespace DapperExtension
             {
                 int index = keys.IndexOf(key);
                 string propertyToUse = ToProperty(key);
-                sb.AppendFormat("{0}{1} = @{2}", index == 0 ? string.Empty : " AND ", key, propertyToUse);
+                sb.AppendFormat(CultureInfo.InvariantCulture, "{0}{1} = @{2}", index == 0 ? string.Empty : " AND ", key, propertyToUse);
             }
         }
 
@@ -613,13 +615,13 @@ namespace DapperExtension
 
             var sb = new StringBuilder();
             BuildSelectColumns<T>(sb);
-            sql = sql.Replace("{SelectColumns}", sb.ToString());
-            sql = sql.Replace("{TableName}", Encapsulate(tableName));
-            sql = sql.Replace("{PageNumber}", pageNumber.ToString());
-            sql = sql.Replace("{RowsPerPage}", rowsPerPage.ToString());
-            sql = sql.Replace("{OrderBy}", orderBy);
-            sql = sql.Replace("{WhereClause}", conditions);
-            sql = sql.Replace("{Offset}", ((pageNumber - 1) * rowsPerPage).ToString());
+            sql = sql.Replace("{SelectColumns}", sb.ToString(), StringComparison.InvariantCulture);
+            sql = sql.Replace("{TableName}", Encapsulate(tableName), StringComparison.InvariantCulture);
+            sql = sql.Replace("{PageNumber}", pageNumber.ToString(CultureInfo.InvariantCulture), StringComparison.InvariantCulture);
+            sql = sql.Replace("{RowsPerPage}", rowsPerPage.ToString(CultureInfo.InvariantCulture), StringComparison.InvariantCulture);
+            sql = sql.Replace("{OrderBy}", orderBy, StringComparison.InvariantCulture);
+            sql = sql.Replace("{WhereClause}", conditions, StringComparison.InvariantCulture);
+            sql = sql.Replace("{Offset}", ((pageNumber - 1) * rowsPerPage).ToString(CultureInfo.InvariantCulture), StringComparison.InvariantCulture);
         }
 
         private static void PrepareGet<T>(object id, out string sql, out DynamicParameters parameters)
@@ -628,7 +630,7 @@ namespace DapperExtension
             var tableName = GetTableName<T>();
             var sb = new StringBuilder("SELECT ");
             BuildSelectColumns<T>(sb);
-            sb.AppendFormat(" FROM {0} WHERE ", Encapsulate(tableName));
+            sb.AppendFormat(CultureInfo.InvariantCulture, " FROM {0} WHERE ", Encapsulate(tableName));
             sb.AppendJoin("AND", keys.Select(o => $"{o} = @{ToProperty(o)}"));
             sql = sb.ToString();
 

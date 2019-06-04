@@ -5,7 +5,17 @@
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CodeAnalysisRuleSet>../DapperExtension.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>1701;1702;1516;1101</NoWarn>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CodeAnalysisRuleSet>../DapperExtension.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>1701;1702;1516;1101</NoWarn>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
   <ItemGroup>
     <None Remove="StyleCop.Cache" />
   </ItemGroup>
