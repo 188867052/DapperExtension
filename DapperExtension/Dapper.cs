@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DapperExtension.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System;
@@ -26,7 +27,7 @@ namespace DapperExtension
 
         static DapperExtension()
         {
-            var properties = typeof(DbContext).GetProperties();
+            var properties = typeof(CoreContext).GetProperties();
             foreach (var property in properties)
             {
                 if (property.ToString().Contains(typeof(DbSet<>).FullName))

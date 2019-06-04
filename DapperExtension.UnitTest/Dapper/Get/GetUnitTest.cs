@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DapperExtension;
+using DapperExtension.Entity;
 using NUnit.Framework;
 
-namespace Core.UnitTest.Dapper.Get
+namespace DapperExtension.UnitTest.Dapper.Get
 {
     /// <summary>
     /// Dapper unit test.
@@ -16,12 +17,12 @@ namespace Core.UnitTest.Dapper.Get
         [Test]
         public async Task TestGet()
         {
-            User user = DapperExtension.DapperExtension.Connection.QueryFirst<User>();
+            User user = DapperExtension.Connection.QueryFirst<User>();
             if (user != null)
             {
-                var users = DapperExtension.DapperExtension.Connection.Get<User>(1);
+                var users = DapperExtension.Connection.Get<User>(1);
                 Assert.IsNotNull(users);
-                users = await DapperExtension.DapperExtension.Connection.GetAsync<User>(new { id = 1 });
+                users = await DapperExtension.Connection.GetAsync<User>(new { id = 1 });
                 Assert.IsNotNull(users);
             }
         }
@@ -29,12 +30,12 @@ namespace Core.UnitTest.Dapper.Get
         [Test]
         public void TestGetList()
         {
-            User user = DapperExtension.DapperExtension.Connection.QueryFirst<User>();
+            User user = DapperExtension.Connection.QueryFirst<User>();
             if (user != null)
             {
-                var users = DapperExtension.DapperExtension.Connection.GetList<User>($"where login_name = '{user.LoginName}'");
+                var users = DapperExtension.Connection.GetList<User>($"where login_name = '{user.LoginName}'");
                 Assert.IsNotNull(users);
-                users = DapperExtension.DapperExtension.Connection.GetList<User>(new { login_name = "Strange 2" });
+                users = DapperExtension.Connection.GetList<User>(new { login_name = "Strange 2" });
                 Assert.IsNotNull(users);
             }
         }
@@ -42,10 +43,10 @@ namespace Core.UnitTest.Dapper.Get
         [Test]
         public void TestUpdateWithSpecifiedColumnName()
         {
-            var log = DapperExtension.DapperExtension.Connection.FindAll<Log>().FirstOrDefault();
+            var log = DapperExtension.Connection.FindAll<Log>().FirstOrDefault();
             if (log != null)
             {
-                int count = DapperExtension.DapperExtension.Connection.Delete<Log>(log.Id);
+                int count = DapperExtension.Connection.Delete<Log>(log.Id);
                 Assert.AreEqual(count, 1);
             }
         }
@@ -53,8 +54,8 @@ namespace Core.UnitTest.Dapper.Get
         [Test]
         public void TestFindAllByExpression()
         {
-            using var dapper = DapperExtension.DapperExtension.Connection;
-            User user = DapperExtension.DapperExtension.Connection.QueryFirst<User>();
+            using var dapper = DapperExtension.Connection;
+            User user = DapperExtension.Connection.QueryFirst<User>();
             if (user != null)
             {
                 var users = dapper.FindAll<User>(o => o.Id, user.Id);
@@ -69,37 +70,37 @@ namespace Core.UnitTest.Dapper.Get
         [Test]
         public void TestGetListNullableWhere()
         {
-            var users = DapperExtension.DapperExtension.Connection.GetList<User>(new { avatar = DBNull.Value });
+            var users = DapperExtension.Connection.GetList<User>(new { avatar = DBNull.Value });
             Assert.IsNotNull(users);
         }
 
         [Test]
         public void TestGetListPaged()
         {
-            var logs = DapperExtension.DapperExtension.Connection.GetListPaged<Log>(2, 10, null, null);
+            var logs = DapperExtension.Connection.GetListPaged<Log>(2, 10, null, null);
             Assert.IsNotNull(logs);
-            logs = DapperExtension.DapperExtension.Connection.GetListPaged<Log>(1, 30, "where Id > @Id", null, new { Id = 14 });
+            logs = DapperExtension.Connection.GetListPaged<Log>(1, 30, "where Id > @Id", null, new { Id = 14 });
             Assert.IsNotNull(logs);
         }
 
         [Test]
         public async Task TestGetListPagedAsync()
         {
-            var logs = await DapperExtension.DapperExtension.Connection.GetListPagedAsync<Log>(2, 10, null, null);
+            var logs = await DapperExtension.Connection.GetListPagedAsync<Log>(2, 10, null, null);
             Assert.IsNotNull(logs);
-            logs = await DapperExtension.DapperExtension.Connection.GetListPagedAsync<Log>(1, 30, "where Id > @Id", null, new { Id = 14 });
+            logs = await DapperExtension.Connection.GetListPagedAsync<Log>(1, 30, "where Id > @Id", null, new { Id = 14 });
             Assert.IsNotNull(logs);
         }
 
         [Test]
         public void TestFilteredGetListParameters()
         {
-            User user = DapperExtension.DapperExtension.Connection.QueryFirst<User>();
+            User user = DapperExtension.Connection.QueryFirst<User>();
             if (user != null)
             {
-                IEnumerable<User> users = DapperExtension.DapperExtension.Connection.GetList<User>("where Id = @Id", new { user.Id });
+                IEnumerable<User> users = DapperExtension.Connection.GetList<User>("where Id = @Id", new { user.Id });
                 Assert.IsNotNull(users);
-                users = DapperExtension.DapperExtension.Connection.GetList<User>(new { user.Id });
+                users = DapperExtension.Connection.GetList<User>(new { user.Id });
                 Assert.IsNotNull(users);
             }
         }
@@ -107,22 +108,22 @@ namespace Core.UnitTest.Dapper.Get
         [Test]
         public void TestGetListWithNullWhere()
         {
-            var users = DapperExtension.DapperExtension.Connection.GetList<User>(null);
+            var users = DapperExtension.Connection.GetList<User>(null);
             Assert.IsNotNull(users);
-            users = DapperExtension.DapperExtension.Connection.GetList<User>(new { });
+            users = DapperExtension.Connection.GetList<User>(new { });
             Assert.IsNotNull(users);
-            users = DapperExtension.DapperExtension.Connection.GetList<User>();
+            users = DapperExtension.Connection.GetList<User>();
             Assert.IsNotNull(users);
         }
 
         [Test]
         public async Task TestGetListWithNullWhereAsync()
         {
-            var users = await DapperExtension.DapperExtension.Connection.GetListAsync<User>(null);
+            var users = await DapperExtension.Connection.GetListAsync<User>(null);
             Assert.IsNotNull(users);
-            users = await DapperExtension.DapperExtension.Connection.GetListAsync<User>(new { });
+            users = await DapperExtension.Connection.GetListAsync<User>(new { });
             Assert.IsNotNull(users);
-            users = await DapperExtension.DapperExtension.Connection.GetListAsync<User>();
+            users = await DapperExtension.Connection.GetListAsync<User>();
             Assert.IsNotNull(users);
         }
     }

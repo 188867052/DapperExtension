@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace DapperExtension.UnitTest
+namespace DapperExtension.Entity
 {
     public partial class CoreContext : DbContext
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DapperExtension.UnitTest
+namespace DapperExtension.Entity
 {
     public partial class Icon
     {
