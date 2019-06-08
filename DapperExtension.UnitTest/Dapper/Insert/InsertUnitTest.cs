@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
-using DapperExtension;
 using DapperExtension.Entity;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;

@@ -21,7 +21,6 @@ namespace DapperExtension
     {
         private static readonly string _getIdentitySql;
         private static readonly string _pagedListSql;
-        private static readonly ConcurrentDictionary<string, string> StringBuilderCacheDictionary = new ConcurrentDictionary<string, string>();
         private static readonly Func<TableInfo, string, bool> predicate = (o, entity) => o.TableName.Replace("_", string.Empty).Equals(entity, StringComparison.InvariantCultureIgnoreCase);
         private static IDbConnection _connection;
         private static readonly bool stringBuilderCacheEnabled = true;
@@ -507,21 +506,6 @@ namespace DapperExtension
         {
             var tp = type.GetProperties().ToList();
             return tp.Where(p => p.Name.Equals("Id", StringComparison.OrdinalIgnoreCase));
-        }
-
-        private static void StringBuilderCache(StringBuilder sb, string cacheKey, Action<StringBuilder> stringBuilderAction)
-        {
-            if (stringBuilderCacheEnabled && StringBuilderCacheDictionary.TryGetValue(cacheKey, out string value))
-            {
-                sb.Append(value);
-                return;
-            }
-
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilderAction(stringBuilder);
-            value = stringBuilder.ToString();
-            StringBuilderCacheDictionary.AddOrUpdate(cacheKey, value, (t, v) => value);
-            sb.Append(value);
         }
 
         private static T QueryTopOne<T, TProperty>(this IDbConnection connection, Expression<Func<T, TProperty>> expression, TProperty value = default)
