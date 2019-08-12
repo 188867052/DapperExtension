@@ -38,10 +38,6 @@
     <PackageReference Include="NUnit.ConsoleRunner" Version="3.10.0" />
     <PackageReference Include="NUnit.Runners" Version="3.10.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
-    <PackageReference Include="StyleCopPlus.MSBuild" Version="4.7.49.5">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.analyzers" Version="0.10.0" />
     <PackageReference Include="xunit.runner.console" Version="2.4.1">
